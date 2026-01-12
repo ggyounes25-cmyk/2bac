@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2BAC Math | Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        /* ستايل مدمج لضمان عدم حدوث تعارض */
+        :root {
+            --primary: #00f2fe;
+            --gold: #ffd700;
+            --glass: rgba(255, 255, 255, 0.05);
+        }
+        body {
+            background: #0f172a;
+            color: white;
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0; padding: 15px;
+            direction: rtl;
+        }
+        .main-container {
+            max-width: 900px; margin: auto;
+            background: var(--glass); border-radius: 20px;
+            padding: 20px; border: 1px solid rgba(255,255,255,0.1);
+        }
+        .table-responsive { overflow-x: auto; margin-top: 20px; }
+        table { width: 100%; border-collapse: collapse; min-width: 600px; }
+        th { color: #94a3b8; font-size: 13px; padding: 10px; }
+        td { padding: 12px 5px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        input[type="number"] {
+            background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1);
+            color: white; padding: 8px; border-radius: 8px; width: 45px; text-align: center;
+        }
+        .coef-badge {
+            color: var(--gold); border: 1px solid var(--gold);
+            padding: 2px 8px; border-radius: 5px; font-weight: bold; font-size: 12px;
+        }
+        .final-avg-display {
+            font-size: 4rem; font-weight: 800; color: var(--primary);
+            text-align: center; margin-top: 20px;
+        }
+        .good { color: #00ff88; }
+        .bad { color: #ff4d4d; }
+        .back-link { color: #64748b; text-decoration: none; display: block; margin-bottom: 15px; }
+    </style>
+</head>
+<body>
+
+    <div class="main-container">
+        <a href="index.html" class="back-link">← العودة للرئيسية</a>
+        <h1 style="text-align: center; margin: 0;">2BAC MATH 📐</h1>
+        
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>المادة</th>
+                        <th>المعامل</th>
+                        <th>C1</th><th>C2</th><th>C3</th><th>C4</th>
+                        <th>الأنشطة</th>
+                        <th>المعدل</th>
+                    </tr>
+                </thead>
+                <tbody id="gradesTable"></tbody>
+            </table>
+        </div>
+
+        <div style="text-align: center; margin-top: 40px;">
+            <p style="color: #94a3b8; margin: 0;">المعدل العام للدورة</p>
+            <div id="final-avg" class="final-avg-display">0.00</div>
+        </div>
+    </div>
+
+    <script>
+        // معاملات العلوم الرياضية
+        const subjects = [
+            { name: "الرياضيات", coef: 9 },
+            { name: "الفيزياء والكيمياء", coef: 7 },
+            { name: "علوم الحياة والأرض", coef: 3 },
+            { name: "اللغة الفرنسية", coef: 4 },
+            { name: "الإنجليزية", coef: 2 },
+            { name: "الفلسفة", coef: 2 },
+            { name: "اللغة العربية", coef: 2 },
+            { name: "التربية البدنية", coef: 4 },
+            { name: "التربية الإسلامية", coef: 2 }
+        ];
+
+        function buildTable() {
+            const tbody = document.getElementById('gradesTable');
+            let html = `
+                <tr style="background: rgba(255,255,255,0.02)">
+                    <td style="text-align:right;">⭐ السلوك</td>
+                    <td><span class="coef-badge">1</span></td>
+                    <td colspan="5"><input type="number" id="bhv" oninput="calc()" style="width:90%"></td>
+                    <td id="bhv-res">-</td>
+                </tr>
+            `;
+
+            html += subjects.map((s, i) => `
+                <tr>
+                    <td style="text-align:right;">${s.name}</td>
+                    <td><span class="coef-badge">${s.coef}</span></td>
+                    <td><input type="number" class="f-${i}" oninput="calc()"></td>
+                    <td><input type="number" class="f-${i}" oninput="calc()"></td>
+                    <td><input type="number" class="f-${i}" oninput="calc()"></td>
+                    <td><input type="number" class="f-${i}" oninput="calc()"></td>
+                    <td><input type="number" id="act-${i}" oninput="calc()"></td>
+                    <td id="res-${i}" style="font-weight:bold">-</td>
+                </tr>
+            `).join('');
+            tbody.innerHTML = html;
+        }
+
+        window.calc = function() {
+            let totalPoints = 0;
+            let totalCoefs = 0;
+
+            subjects.forEach((s, i) => {
+                const inputs = document.querySelectorAll('.f-' + i);
+                let grades = Array.from(inputs).map(inp => inp.value).filter(v => v !== "").map(Number);
+                let act = document.getElementById('act-' + i).value;
+                let resCell = document.getElementById('res-' + i);
+
+                // التأكد من عدم تجاوز 20
+                inputs.forEach(inp => { if(inp.value > 20) inp.value = 20; });
+                if(act > 20) document.getElementById('act-' + i).value = 20;
+
+                if (grades.length > 0 || act !== "") {
+                    let avgGrades = grades.length > 0 ? (grades.reduce((a, b) => a + b) / grades.length) : 0;
+                    let finalGrade = (act === "") ? avgGrades : (avgGrades * 0.75) + (Number(act) * 0.25);
+                    
+                    resCell.innerText = finalGrade.toFixed(2);
+                    resCell.className = finalGrade >= 10 ? "good" : "bad";
+                    
+                    totalPoints += (finalGrade * s.coef);
+                    totalCoefs += s.coef;
+                }
+            });
+
+            // حساب السلوك
+            let bhv = document.getElementById('bhv').value;
+            if(bhv !== "") {
+                let v = parseFloat(bhv);
+                if(v > 20) { v = 20; document.getElementById('bhv').value = 20; }
+                document.getElementById('bhv-res').innerText = v.toFixed(2);
+                totalPoints += v;
+                totalCoefs += 1;
+            }
+
+            let finalAvg = totalCoefs > 0 ? (totalPoints / totalCoefs) : 0;
+            const display = document.getElementById('final-avg');
+            display.innerText = finalAvg.toFixed(2);
+            display.className = "final-avg-display " + (finalAvg >= 10 ? "good" : "bad");
+            
+            save();
+        };
+
+        function save() {
+            const allData = {
+                bhv: document.getElementById('bhv').value,
+                marks: subjects.map((_, i) => {
+                    const inputs = document.querySelectorAll('.f-' + i);
+                    return {
+                        fs: Array.from(inputs).map(inp => inp.value),
+                        act: document.getElementById('act-' + i).value
+                    }
+                })
+            };
+            localStorage.setItem('math_results', JSON.stringify(allData));
+        }
+
+        function load() {
+            const data = JSON.parse(localStorage.getItem('math_results'));
+            if(data) {
+                document.getElementById('bhv').value = data.bhv;
+                data.marks.forEach((m, i) => {
+                    const inputs = document.querySelectorAll('.f-' + i);
+                    m.fs.forEach((val, idx) => { if(inputs[idx]) inputs[idx].value = val; });
+                    document.getElementById('act-' + i).value = m.act;
+                });
+                calc();
+            }
+        }
+
+        buildTable();
+        load();
+    </script>
+</body>
+</html>

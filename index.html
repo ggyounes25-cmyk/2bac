@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بوابة اختيار المسار | 2BAC</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #00f2fe;
+            --glass: rgba(255, 255, 255, 0.03);
+            --border: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background: radial-gradient(circle at center, #1e293b, #0f172a);
+            color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            direction: rtl;
+        }
+
+        .selection-card {
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            padding: 40px 20px;
+            border-radius: 30px;
+            border: 1px solid var(--border);
+            width: 90%;
+            max-width: 450px;
+            text-align: center;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            font-weight: 800;
+            background: linear-gradient(to right, #00f2fe, #4facfe);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        p {
+            color: #94a3b8;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .option-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 18px 25px;
+            border-radius: 15px;
+            text-decoration: none;
+            color: white;
+            border: 1px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .option-item:hover {
+            background: rgba(0, 242, 254, 0.1);
+            border-color: var(--primary);
+            transform: scale(1.02);
+        }
+
+        .option-text {
+            display: flex;
+            flex-direction: column;
+            text-align: right;
+        }
+
+        .option-title {
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .option-subtitle {
+            font-size: 12px;
+            color: #64748b;
+        }
+
+        .icon {
+            font-size: 24px;
+        }
+
+        /* لمسة جمالية سفلية */
+        .footer-note {
+            margin-top: 30px;
+            font-size: 11px;
+            color: #475569;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="selection-card">
+        <h1>إختر مسلكك الدراسي</h1>
+        <p>قم باختيار الشعبة لعرض المواد والمعاملات الخاصة بك</p>
+
+        <div class="options-list">
+            <a href="math.html" class="option-item">
+                <div class="option-text">
+                    <span class="option-title">2BAC MATH</span>
+                    <span class="option-subtitle">العلوم الرياضية (أ / ب)</span>
+                </div>
+                <span class="icon">📐</span>
+            </a>
+
+            <a href="physics.html" class="option-item">
+                <div class="option-text">
+                    <span class="option-title">2BAC PHYSIQUE</span>
+                    <span class="option-subtitle">مسلك العلوم الفيزيائية</span>
+                </div>
+                <span class="icon">🧪</span>
+            </a>
+
+            <a href="svt.html" class="option-item">
+                <div class="option-text">
+                    <span class="option-title">2BAC SVT</span>
+                    <span class="option-subtitle">علوم الحياة والأرض</span>
+                </div>
+                <span class="icon">🌿</span>
+            </a>
+        </div>
+
+        <div class="footer-note">
+            جميع الحسابات تتم بناءً على المعاملات الرسمية للوزارة
+        </div>
+    </div>
+
+</body>
+</html>
